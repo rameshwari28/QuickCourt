@@ -10,7 +10,7 @@ interface OTPVerificationProps {
 export const OTPVerification: React.FC<OTPVerificationProps> = ({ onNavigate }) => {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
-  const { verifyOTP, isLoading } = useAuth();
+  const { verifyOTP, isLoading, pendingVerificationEmail } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,11 +22,16 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({ onNavigate }) 
       return;
     }
 
-    const success = await verifyOTP(otpString);
+    if (!pendingVerificationEmail) {
+      setError('No email found for verification. Please register again.');
+      return;
+    }
+
+    const success = await verifyOTP(pendingVerificationEmail, otpString);
     if (success) {
       onNavigate('home');
     } else {
-      setError('Invalid OTP. Use 123456 for demo.');
+      setError('Invalid OTP. Please check your email for the correct code.');
     }
   };
 
@@ -62,13 +67,15 @@ export const OTPVerification: React.FC<OTPVerificationProps> = ({ onNavigate }) 
             </div>
           </div>
           <h2 className="text-3xl font-bold text-gray-900">Verify your email</h2>
-          <p className="mt-2 text-gray-600">Enter the 6-digit code sent to your email</p>
+          <p className="mt-2 text-gray-600">
+            Enter the 6-digit code sent to {pendingVerificationEmail || 'your email'}
+          </p>
         </div>
 
-        {/* Demo info */}
+        {/* Info */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
           <p className="text-sm text-blue-800">
-            <strong>Demo OTP:</strong> 123456
+            Check your email for a 6-digit verification code
           </p>
         </div>
 
