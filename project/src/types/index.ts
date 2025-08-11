@@ -6,6 +6,19 @@ export interface User {
   role: 'user' | 'facility_owner' | 'admin';
   createdAt: Date;
   isVerified: boolean;
+  // Supabase specific fields
+  emailVerified?: boolean;
+  lastSignInAt?: Date;
+}
+
+export interface UserProfile {
+  id: string;
+  user_id: string;
+  full_name: string;
+  avatar?: string;
+  role: 'user' | 'facility_owner' | 'admin';
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Venue {
@@ -65,8 +78,14 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
-  verifyOTP: (otp: string) => Promise<boolean>;
+  verifyOTP: (email: string, otp: string) => Promise<boolean>;
   isLoading: boolean;
+  pendingVerificationEmail: string;
+  // New Supabase methods
+  signInWithEmail: (email: string, password: string) => Promise<boolean>;
+  signUpWithEmail: (email: string, password: string, metadata?: { fullName?: string; role?: string }) => Promise<boolean>;
+  resetPassword: (email: string) => Promise<boolean>;
+  updatePassword: (password: string) => Promise<boolean>;
 }
 
 export interface RegisterData {
