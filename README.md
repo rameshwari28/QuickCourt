@@ -1,4 +1,5 @@
-.
+https://drive.google.com/drive/folders/1MVJbVmgbGSekYeuJurCaGWwb6euuLocL?usp=drive_link.
+video demo
 
 Changes made via Lovable will be committed automatically to this repo.
 
